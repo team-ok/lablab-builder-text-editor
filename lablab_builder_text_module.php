@@ -12,19 +12,23 @@
  * Domain Path:       /languages
  */
 
-if ( class_exists( 'Lablab_Module_Builder' ) ):
-	class Lablab_Builder_Text_Module extends Lablab_Module_Builder {
 
-		public function __construct(){
+// load the plugin textdomain
+add_action( 'plugins_loaded', 'load_lablab_text_editor_module_textdomain' );
+function load_lablab_text_editor_module_textdomain(){
 
-			$this->title = 'Text Editor';
-			$this->key = 'field_lablab_text_editor';
-			$this->name = 'lablab-text-editor';
-			$this->fields = plugin_dir_path( __FILE__ ) . 'fields/';
-			$this->template_path = plugin_dir_path( __FILE__ ) . 'template/lablab-text-editor.php';
-		}
-	}
-endif;
+	// Relative path to WP_PLUGIN_DIR where the .mo file resides
+	$domain_path = dirname( plugin_basename( __FILE__ ) ) . '/languages';
+
+	load_plugin_textdomain( 'lablab-text', false, $domain_path );
+}
+
+// load the module class
+add_action( 'plugins_loaded', 'load_lablab_text_editor_module_class' );
+function load_lablab_text_editor_module_class(){
+
+	require_once( plugin_dir_path( __FILE__ ) . 'classes/class-lablab-builder-text-editor-module.php' );
+}
 
 // register this module with lablab builder
 add_filter( 'lablab_builder_modules', array( 'Lablab_Builder_Text_Module', 'register' ) );
